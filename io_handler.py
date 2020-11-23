@@ -38,17 +38,24 @@ def loaddata(nums):
     return (AMDs, energy)
 
 
-def get_random(origin_index, num):
-    times = 3000
+def get_random(origin_index, num, random_off=False):
     random_list = []
-    for i in range(times):
-        temp_list = []
-        for i in range(num):
-            temp = random.randint(1,1000)
-            while temp in random_list:
-                temp = random.randint(1, 1001)
-            temp_list.append(temp)
-        random_list.append(temp_list)
+    times = 50
+    if not random_off:
+        for j in range(times):
+            temp_list = []
+            for i in range(num):
+                temp = random.randint(1,1000)
+                while temp in random_list:
+                    temp = random.randint(1, 1001)
+                temp_list.append(temp)
+            random_list.append(temp_list)
+    else:
+        for j in range(times):
+            temp = []
+            for i in range(1, 51):
+                temp.append(i)
+            random_list.append(temp)
     return random_list
 
 
@@ -58,13 +65,13 @@ if __name__ == '__main__':
     index = 0
     for i in range(1,1001):
         origin_index.append(i)
-    for i in get_random(origin_index, 50):
+    for i in get_random(origin_index, 50, random_off=True):
         index_file.append(i)
         index += 1
 
         AMDs, energy = loaddata(i)
         AMDs_train, AMDs_test, energy_train, energy_test = \
-            train_test_split(AMDs, energy, test_size=5179, random_state=2018)
+            train_test_split(AMDs, energy, test_size=5179)
         print(np.array(AMDs_train).shape)
         print(np.array(AMDs_test).shape)
 
@@ -90,7 +97,7 @@ if __name__ == '__main__':
         plt.savefig('./image/pvsg_'+str(index)+'.jpg')
         #plt.show()
 
-    with open("data_set.csv", 'w', newline="") as file:
-        csv_writer = csv.writer(file)
-        for arr in index_file:
-            csv_writer.writerow(arr)
+    # with open("data_set.csv", 'w', newline="") as file:
+    #     csv_writer = csv.writer(file)
+    #     for arr in index_file:
+    #         csv_writer.writerow(arr)
